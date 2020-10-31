@@ -11,8 +11,6 @@ struct Color {
     blue: u8,
 }
 
-// I AM NOT DONE
-
 // Your task is to complete this implementation
 // and return an Ok result of inner type Color.
 // You need create implementation for a tuple of three integer,
@@ -22,10 +20,22 @@ struct Color {
 // but slice implementation need check slice length!
 // Also note, that chunk of correct rgb color must be integer in range 0..=255.
 
+fn get_color(red: i16, green: i16, blue: i16) -> Result<Color, String>{
+    if red > 255 || blue > 255 || green > 255 || red < 0 || blue < 0 || green < 0 {
+        Err("Cannot parse color".to_string())
+    } else {
+        Ok(Color { red: red as u8, blue: blue as u8, green: green as u8 })
+    }
+}
+
 // Tuple implementation
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = String;
     fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        let red = tuple.0;
+        let green = tuple.1;
+        let blue = tuple.2;
+        get_color(red, green, blue)
     }
 }
 
@@ -33,6 +43,10 @@ impl TryFrom<(i16, i16, i16)> for Color {
 impl TryFrom<[i16; 3]> for Color {
     type Error = String;
     fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        let red = arr[0];
+        let green = arr[1];
+        let blue = arr[2];
+        get_color(red, green, blue)
     }
 }
 
@@ -40,6 +54,14 @@ impl TryFrom<[i16; 3]> for Color {
 impl TryFrom<&[i16]> for Color {
     type Error = String;
     fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        if slice.len() != 3 {
+            Err("Slice has wrong size".to_string())
+        } else {
+            let red = slice[0];
+            let green = slice[1];
+            let blue = slice[2];
+            get_color(red, green, blue)    
+        }
     }
 }
 

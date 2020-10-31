@@ -17,19 +17,27 @@
 //
 // Execute `rustlings hint errorsn` for hints :)
 
-// I AM NOT DONE
+/**
+
+Another hint: under the hood, the `?` operator calls `From::from`
+on the error value to convert it to a boxed trait object, a Box<dyn error::Error>,
+which is polymorphic-- that means that lots of different kinds of errors
+can be returned from the same function because all errors act the same
+since they all implement the `error::Error` trait.
+
+*/
 
 use std::error;
 use std::fmt;
 use std::io;
 
 // PositiveNonzeroInteger is a struct defined below the tests.
-fn read_and_validate(b: &mut dyn io::BufRead) -> Result<PositiveNonzeroInteger, ???> {
+fn read_and_validate(b: &mut dyn io::BufRead) -> Result<PositiveNonzeroInteger, Box<dyn error::Error>> {
     let mut line = String::new();
-    b.read_line(&mut line);
-    let num: i64 = line.trim().parse();
-    let answer = PositiveNonzeroInteger::new(num);
-    answer
+    b.read_line(&mut line)?;
+    let num: i64 = line.trim().parse()?;
+    let answer = PositiveNonzeroInteger::new(num)?;
+    Ok(answer)
 }
 
 //

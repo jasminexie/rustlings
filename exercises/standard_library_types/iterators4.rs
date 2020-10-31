@@ -1,8 +1,8 @@
 // iterators4.rs
 
-// I AM NOT DONE
-
 pub fn factorial(num: u64) -> u64 {
+    let range_list = std::ops::Range { start: 1u64, end: num + 1 };
+    range_list.into_iter().fold(1, |acc, x| acc * x)
     // Complete this function to return the factorial of num
     // Do not use:
     // - return
